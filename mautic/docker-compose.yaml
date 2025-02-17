@@ -1,0 +1,41 @@
+services:
+
+  mauticdb:
+    restart: always
+    image: mariadb:latest
+    container_name: mauticdb
+    volumes:
+      - ./data/mysql_data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MAUTIC_DB_NAME}
+      - MYSQL_USER=${MAUTIC_DB_USER}
+      - MYSQL_PASSWORD=${MAUTIC_DB_PASSWORD}
+    command:
+      --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+    networks:
+      - mautic-net
+
+  mautic:
+    restart: always
+    image: mautic/mautic:latest
+    container_name: mautic
+    depends_on:
+      - mauticdb
+    ports:
+      - 8070:80
+    volumes:
+      - ./data/mautic_data:/var/www/html
+    environment:
+      - MAUTIC_DB_HOST=mauticdb
+      - MAUTIC_DB_USER=${MAUTIC_DB_USER}
+      - MAUTIC_DB_PASSWORD=${MAUTIC_DB_PASSWORD}
+      - MAUTIC_DB_NAME=${MAUTIC_DB_NAME}
+      - MAUTIC_RUN_CRON_JOBS=${MAUTIC_RUN_CRON_JOBS}
+    networks:
+      - mautic-net
+
+networks:
+  mautic-net:
+    name: mautic-net
+    driver: bridge
