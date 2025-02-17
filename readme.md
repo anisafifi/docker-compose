@@ -13,8 +13,8 @@ This repository contains a Docker Compose setup for managing your multi-containe
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/yourusername/your-repo.git
-    cd your-repo
+    git clone https://github.com/anisafifi/docker-compose
+    cd docker-compose
     ```
 
 2. Start the Docker containers:
